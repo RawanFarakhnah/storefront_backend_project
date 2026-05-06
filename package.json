@@ -1,0 +1,49 @@
+{
+  "name": "setup_model2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "nodemon --watch src --exec ts-node src/server.ts",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
+    "migrate:test": "cross-env ENV=test db-migrate --env test up",
+    "test:setup": "cross-env ENV=test db-migrate db:drop test && npm run migrate:test",
+    "test": "cross-env ENV=test npm run build && npm run test:setup && jasmine"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "db-migrate": "^0.11.14",
+    "db-migrate-pg": "^1.5.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jasmine": "^6.0.0",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.6.0",
+    "jasmine": "^6.2.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}

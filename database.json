@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "shapes",
+    "user": "postgres",
+    "password": "password123"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "shapes_test",
+    "user": "postgres",
+    "password": "password123"
+  }
+}
