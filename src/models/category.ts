@@ -24,7 +24,7 @@ export class CategoryModel {
     try {
       const sql = 'SELECT * FROM categories WHERE id=($1);';
       const conn = await client.connect();
-      const result = await conn.query(sql);
+      const result = await conn.query(sql, [id]);
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -34,10 +34,15 @@ export class CategoryModel {
 
   async create(input: Category): Promise<Category> {
     try {
+      const normalized = input.name
+        .trim()
+        .toLowerCase()
+        .replace(/^./, (c) => c.toUpperCase());
+
       const sql =
         'INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *;';
       const conn = await client.connect();
-      const result = await conn.query(sql, [input.name, input.description]);
+      const result = await conn.query(sql, [normalized, input.description]);
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -49,13 +54,22 @@ export class CategoryModel {
 
   async edit(input: Category): Promise<Category> {
     try {
+      const normalized = input.name
+        .trim()
+        .toLowerCase()
+        .replace(/^./, (c) => c.toUpperCase());
+
       const sql = `
-        UPDATE categories c SET
-          c.name = $1, 
-          c.description = $2
-        WHERE c.id = $4 RETURNING *`;
+        UPDATE categories SET
+          name = $1, 
+          description = $2
+        WHERE id = $3 RETURNING *`;
       const conn = await client.connect();
-      const result = await conn.query(sql, [input.name, input.description]);
+      const result = await conn.query(sql, [
+        normalized,
+        input.description,
+        input.id,
+      ]);
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -75,21 +89,6 @@ export class CategoryModel {
       return result.rows[0];
     } catch (err) {
       throw new Error(`Could not delete category ${id}. Error: ${err}`);
-    }
-  }
-
-  async findCategoryByName(name: string): Promise<Category> {
-    try {
-      const sql = `
-       SELECT * FROM categories
-       WHERE name =($1);`;
-      const conn = await client.connect();
-      const result = await conn.query(sql, [name.toLowerCase]);
-      conn.release();
-
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(`Could not find category name ${name}. Error: ${err}`);
     }
   }
 }

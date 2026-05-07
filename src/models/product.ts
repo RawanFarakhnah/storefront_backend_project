@@ -8,6 +8,7 @@ export type Product = {
 };
 
 export class ProductModel {
+  //Index - API Endpoint
   async index(): Promise<Product[]> {
     try {
       const sql = `
@@ -26,6 +27,7 @@ export class ProductModel {
     }
   }
 
+  //Show - API Endpoint
   async show(id: string): Promise<Product> {
     try {
       const sql = `
@@ -45,14 +47,74 @@ export class ProductModel {
     }
   }
 
+  //[OPTIONAL] Products by category :- API Endpoint
+  async getByCategoryName(name: string): Promise<Product[]> {
+    try {
+      const sql = `
+        SELECT 
+          p.*,
+          c.name AS category_name
+        FROM products p
+        JOIN categories c 
+          ON c.id = p.category_id
+        WHERE c.name ILIKE $1;
+      `;
+      const conn = await client.connect();
+      const result = await conn.query(sql, [`%${name}%`]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(
+        `Could not find specific product with category ${name}. Error: ${err}`,
+      );
+    }
+  }
+
+  //[OPTIONAL] Top 5 Products - Get By Popular Products
+  async getTopProducts(): Promise<Product[]> {
+    try {
+      const sql = `
+        SELECT 
+          p.id,
+          p.name,
+          p.price,
+          c.name AS category,
+          SUM(op.quantity) AS total_sold
+        FROM orders_products op
+        JOIN products p ON p.id = op.product_id
+        JOIN categories c ON c.id = p.category_id
+        GROUP BY p.id, c.name
+        ORDER BY total_sold DESC
+        LIMIT 5;
+      `;
+
+      const conn = await client.connect();
+      const result = await conn.query(sql);
+      conn.release();
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Could not find top 5 products. Error: ${err}`);
+    }
+  }
+
   async getOrCreateCategoryId(name: string): Promise<number> {
-    const sql = `INSERT INTO categories (name)
-     VALUES ($1)
-     ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
-     RETURNING id;`;
+    const normalized = name
+      .trim()
+      .toLowerCase()
+      .replace(/^./, (c) => c.toUpperCase());
+
+    const sql = `
+    INSERT INTO categories (name)
+    VALUES ($1)
+    ON CONFLICT (name)
+    DO UPDATE SET name = categories.name
+    RETURNING id;
+  `;
+
     const conn = await client.connect();
-    const result = await conn.query(sql, [name.toLowerCase()]);
+    const result = await conn.query(sql, [normalized]);
     conn.release();
+
     return result.rows[0].id;
   }
 
