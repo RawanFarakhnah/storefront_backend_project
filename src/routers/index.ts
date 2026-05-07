@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import categoryRouter from './category';
 import productRouter from './product';
+import userRouter from './user';
+import orderRouter from './order';
 
 const mainRouter = Router();
 
@@ -12,5 +14,7 @@ mainRouter.get('/', function (_req: Request, res: Response) {
 // mount feature routers
 mainRouter.use('/categories', categoryRouter);
 mainRouter.use('/products', productRouter);
+mainRouter.use('/users', userRouter);
+mainRouter.use('/orders', orderRouter);
 
 export default mainRouter;

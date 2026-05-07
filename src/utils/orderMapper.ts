@@ -4,7 +4,7 @@ type OrderRow = {
   order_id: number;
   status: 'active' | 'complete';
   user_id: number;
-  username: string;
+  full_name: string;
   product_id: number;
   name: string;
   price: number;
@@ -22,7 +22,7 @@ export function mapOrderRows(rows: OrderRow[]): Order[] {
         id: row.order_id,
         status: row.status,
         user_id: row.user_id,
-        username: row.username,
+        full_name: row.full_name,
         products: [],
       };
 

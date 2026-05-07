@@ -7,7 +7,7 @@ const categoryModel = new CategoryModel();
 export const index = async (_req: Request, res: Response) => {
   try {
     const categories = await categoryModel.index();
-    res.json({ message: 'this is the INDEX route', data: categories });
+    res.json({ data: categories });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -19,7 +19,7 @@ export const show = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
     const category = await categoryModel.show(id);
-    res.json({ message: 'this is the SHOW route', data: category });
+    res.json({ data: category });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -34,7 +34,7 @@ export const create = async (req: Request, res: Response) => {
       description: req.body.description,
     };
     const newProduct = await categoryModel.create(input);
-    res.json({ message: 'this is the CREATE route', data: newProduct });
+    res.json({ data: newProduct });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -50,7 +50,7 @@ export const update = async (req: Request, res: Response) => {
       description: req.body.description,
     };
     const category = await categoryModel.edit(input);
-    res.json({ message: 'this is the EDIT route', data: category });
+    res.json({ data: category });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -62,11 +62,9 @@ export const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
     const deleted = await categoryModel.delete(id);
-    res.json({ message: 'this is the DELETE route', data: deleted });
+    res.json({ data: deleted });
   } catch (err) {
     res.status(400);
     res.json(err);
   }
 };
-
-//TODO: Add Test For All CRUD Methods [required]

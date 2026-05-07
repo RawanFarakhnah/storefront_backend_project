@@ -7,7 +7,7 @@ const productModel = new ProductModel();
 export const index = async (_req: Request, res: Response) => {
   try {
     const products = await productModel.index();
-    res.json({ message: 'this is the INDEX route', data: products });
+    res.json({ data: products });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -19,7 +19,7 @@ export const show = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
     const product = await productModel.show(id);
-    res.json({ message: 'this is the SHOW route', data: product });
+    res.json({ data: product });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -35,7 +35,7 @@ export const create = async (req: Request, res: Response) => {
       category: req.body.category,
     };
     const newProduct = await productModel.create(input);
-    res.json({ message: 'this is the CREATE route', data: newProduct });
+    res.json({ data: newProduct });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -52,7 +52,7 @@ export const update = async (req: Request, res: Response) => {
       category: req.body.category,
     };
     const product = await productModel.edit(input);
-    res.json({ message: 'this is the EDIT route', data: product });
+    res.json({ data: product });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -64,7 +64,7 @@ export const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
     const deleted = await productModel.delete(id);
-    res.json({ message: 'this is the DELETE route', data: deleted });
+    res.json({ data: deleted });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -93,6 +93,3 @@ export const getMostPopularProducts = async (_req: Request, res: Response) => {
     res.json(err);
   }
 };
-
-//TODO: Create [token required]
-//TODO: Add Test For All CRUD Methods [required]

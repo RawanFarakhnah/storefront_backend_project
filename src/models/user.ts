@@ -32,7 +32,6 @@ export class UserModel {
     }
   }
 
-  // Registe NEW user
   async create(input: User): Promise<User> {
     try {
       const conn = await client.connect();
@@ -53,6 +52,45 @@ export class UserModel {
       return user;
     } catch (err) {
       throw new Error(`unable create user (${input.firstName}): ${err}`);
+    }
+  }
+
+  async edit(input: User): Promise<User> {
+    try {
+      const sql = `
+       UPDATE users SET
+       firstName = $1,
+       lastName = $2, 
+       password_digest = $3 
+       WHERE id = $4 
+       RETURNING *;`;
+
+      const conn = await client.connect();
+      const result = await conn.query(sql, [
+        input.firstName.trim(),
+        input.lastName.trim(),
+        input.password_digest,
+        input.id,
+      ]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot update user ${err}`);
+    }
+  }
+
+  async delete(id: string): Promise<User> {
+    try {
+      const sql = `DELETE FROM users
+       WHERE id = $1
+       RETURNING *;`;
+      const conn = await client.connect();
+      const result = await conn.query(sql, [id]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
   }
 }
