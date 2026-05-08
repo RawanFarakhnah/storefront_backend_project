@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { CreateOrEditUserDto, UserModel } from '../models/user';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const userModel = new UserModel();
+const tokenSecret = process.env.TOKEN_SECRET as string;
 
 //Get All Users - INDEX method
-export const index = async (_req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   try {
     const users = await userModel.index();
     res.json({ data: users });
@@ -28,15 +32,20 @@ export const show = async (req: Request, res: Response) => {
 
 //Create User - CREATE method
 export const create = async (req: Request, res: Response) => {
-  try {
-    const input: CreateOrEditUserDto = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      password: req.body.password,
-    };
+  const input: CreateOrEditUserDto = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+  };
 
+  try {
     const newUser = await userModel.create(input);
-    res.json({ data: newUser });
+    let token = jwt.sign({ user: newUser }, tokenSecret);
+    res.json({
+      message: `User created in successfully.`,
+      token: `${token}`,
+      data: newUser,
+    });
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -45,14 +54,27 @@ export const create = async (req: Request, res: Response) => {
 
 //Update User - EDIT method
 export const update = async (req: Request, res: Response) => {
-  try {
-    const input: CreateOrEditUserDto = {
-      id: Number(req.params.id),
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      password: req.body.password,
-    };
+  const input: CreateOrEditUserDto = {
+    id: Number(req.params.id),
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+  };
 
+  // try {
+  //   const authorizationHeader = req.headers.authorization as string;
+  //   const token = authorizationHeader.split(' ')[1] as string;
+  //   const decoded = jwt.verify(token, tokenSecret);
+  //   if (decoded.id !== input.id) {
+  //     throw new Error('User id does not match!');
+  //   }
+  // } catch (err) {
+  //   res.status(401);
+  //   res.json(err);
+  //   return;
+  // }
+
+  try {
     const result = await userModel.edit(input);
     res.json({ data: result });
   } catch (err) {
@@ -72,9 +94,3 @@ export const remove = async (req: Request, res: Response) => {
     res.json(err);
   }
 };
-
-/**#### Users
-- TODO: Index [token required]
-- TODO: Show [token required] 
-- TODO: Create N[token required]
-*/

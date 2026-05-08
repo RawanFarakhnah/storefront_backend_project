@@ -6,9 +6,9 @@ import mainRoute from './routers';
 
 dotenv.config();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const app: express.Application = express();
-const address: string = `0.0.0.0:3000`;
+const address: string = `127.0.0.1:3001`;
 
 app.use(cors());
 app.use(bodyParser.json());

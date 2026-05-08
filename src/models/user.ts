@@ -159,4 +159,42 @@ export class UserModel {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
   }
+
+  async authenticate(input: User, password: string): Promise<User | null> {
+    const conn = await client.connect();
+    try {
+      const sql = `
+     SELECT password_digest 
+     FROM users 
+     WHERE firstName = $1
+       AND lastName = $2
+       LIMIT 1;
+     `;
+
+      const data = await conn.query(sql, [
+        input.firstName.trim(),
+        input.lastName.trim(),
+      ]);
+      conn.release();
+      const user = data.rows[0];
+      if (!user) {
+        return null;
+      }
+
+      const isValidPassword = bcrypt.compareSync(
+        password + pepper,
+        user.password_digest,
+      );
+
+      if (!isValidPassword) {
+        return null;
+      }
+
+      delete user.password_digest;
+
+      return user;
+    } catch (err) {
+      throw new Error(`Authentication failed. Error: ${err}`);
+    }
+  }
 }
