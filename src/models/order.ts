@@ -100,20 +100,13 @@ export class OrderModel {
         JOIN users u ON u.id = o.user_id
         JOIN orders_products op ON op.order_id = o.id
         JOIN products p ON p.id = op.product_id
-        WHERE o.id = (
-         SELECT id FROM orders
-         WHERE status = 'active'
-           AND user_id = $1
-         ORDER BY created_at DESC);
-      `;
+        WHERE o.status = 'complete' 
+           AND o.user_id = $1 
+        ORDER BY o.created_at DESC`;
 
       const conn = await client.connect();
       const result = await conn.query(sql, [userId]);
       conn.release();
-
-      if (result.rows.length === 0) {
-        return [];
-      }
 
       return mapOrderRows(result.rows);
     } catch (err) {

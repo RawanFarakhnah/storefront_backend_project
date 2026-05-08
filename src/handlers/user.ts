@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { User, UserModel } from '../models/user';
-import bcrypt from 'bcrypt';
+import { CreateOrEditUserDto, UserModel } from '../models/user';
 
 const userModel = new UserModel();
-const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
 //Get All Users - INDEX method
 export const index = async (_req: Request, res: Response) => {
@@ -31,16 +29,10 @@ export const show = async (req: Request, res: Response) => {
 //Create User - CREATE method
 export const create = async (req: Request, res: Response) => {
   try {
-    const password: string = req.body.password;
-    const hash = await bcrypt.hash(
-      password + BCRYPT_PASSWORD,
-      Number(SALT_ROUNDS),
-    );
-
-    const input: User = {
+    const input: CreateOrEditUserDto = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      password_digest: hash,
+      password: req.body.password,
     };
 
     const newUser = await userModel.create(input);
@@ -54,17 +46,11 @@ export const create = async (req: Request, res: Response) => {
 //Update User - EDIT method
 export const update = async (req: Request, res: Response) => {
   try {
-    const password: string = req.body.password;
-    const hash = await bcrypt.hash(
-      password + BCRYPT_PASSWORD,
-      Number(SALT_ROUNDS),
-    );
-
-    const input: User = {
+    const input: CreateOrEditUserDto = {
       id: Number(req.params.id),
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      password_digest: hash,
+      password: req.body.password,
     };
 
     const result = await userModel.edit(input);
@@ -91,5 +77,4 @@ export const remove = async (req: Request, res: Response) => {
 - TODO: Index [token required]
 - TODO: Show [token required] 
 - TODO: Create N[token required]
-- TODO: Add Test For All CRUD Methods [required]
 */

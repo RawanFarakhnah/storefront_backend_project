@@ -8,8 +8,4 @@ describe('Database Connection', () => {
 
     expect(result.rows.length).toBeGreaterThan(0);
   });
-
-  afterAll(async () => {
-    await client.end();
-  });
 });

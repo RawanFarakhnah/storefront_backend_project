@@ -36,7 +36,7 @@ export class ProductModel {
           c.name AS category_name
         FROM products p
         JOIN categories c ON c.id = p.category_id
-        WHERE id = $1;
+        WHERE p.id = $1;
       `;
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
@@ -62,7 +62,7 @@ export class ProductModel {
       const conn = await client.connect();
       const result = await conn.query(sql, [`%${name}%`]);
       conn.release();
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(
         `Could not find specific product with category ${name}. Error: ${err}`,
@@ -91,7 +91,15 @@ export class ProductModel {
       const conn = await client.connect();
       const result = await conn.query(sql);
       conn.release();
-      return result.rows;
+
+      //Mapping Data
+      return result.rows.map((row) => ({
+        id: Number(row.id),
+        name: row.name,
+        price: Number(row.price),
+        category: row.category,
+        total_sold: Number(row.total_sold),
+      }));
     } catch (err) {
       throw new Error(`Could not find top 5 products. Error: ${err}`);
     }

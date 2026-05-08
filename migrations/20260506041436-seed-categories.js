@@ -20,14 +20,19 @@ exports.up = function(db) {
     ('Electronics', 'Devices and gadgets'),
     ('Furniture', 'Home and office furniture'),
     ('Books', 'Printed and digital books'),
-    ('Clothing', 'Apparel and fashion items');
+    ('Clothing', 'Fashion and apparel'),
+    ('Sports', 'Sports equipment'),
+    ('Beauty', 'Beauty and skincare'),
+    ('Toys', 'Kids toys and games'),
+    ('Kitchen', 'Kitchen tools and appliances'),
+    ('Automotive', 'Vehicle accessories'),
+    ('Health', 'Health and wellness');
   `);
 };
 
 exports.down = function(db) {
  return db.runSql(`
-    DELETE FROM categories
-    WHERE name IN ('Electronics', 'Furniture', 'Books', 'Clothing');
+    DELETE FROM categories;
   `);
 };
 
