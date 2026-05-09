@@ -41,11 +41,7 @@ export const create = async (req: Request, res: Response) => {
   try {
     const newUser = await userModel.create(input);
     let token = jwt.sign({ user: newUser }, tokenSecret);
-    res.json({
-      message: `User created in successfully.`,
-      token: `${token}`,
-      data: newUser,
-    });
+    res.json({ data: token });
   } catch (err) {
     res.status(400);
     res.json(err);

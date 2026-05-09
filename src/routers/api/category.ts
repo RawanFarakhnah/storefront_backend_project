@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as handler from '../handlers/category';
-import verifyAuthToken from '../middleware/auth';
+import * as handler from '../../handlers/category';
+import verifyAuthToken from '../../middleware/auth';
 
 const categoryRouter = Router();
 

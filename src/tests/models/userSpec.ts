@@ -81,6 +81,53 @@ describe('UserModel', () => {
   });
 
   // -----------------------------
+  // AUTHENTICATE
+  // -----------------------------
+  it('authenticate should return the authenticated user', async () => {
+    const result = await userModel.authenticate(
+      {
+        firstName: 'Test22',
+        lastName: 'Test',
+      },
+      'passwordTest',
+    );
+
+    expect(result).not.toBeNull();
+
+    expect(result).toEqual(
+      jasmine.objectContaining({
+        id: createdUserId,
+        firstName: 'Test22',
+        lastName: 'Test',
+      }),
+    );
+  });
+
+  it('authenticate should fail with wrong password', async () => {
+    const result = await userModel.authenticate(
+      {
+        firstName: 'Test22',
+        lastName: 'Test',
+      },
+      'wrongPassword',
+    );
+
+    expect(result).toBeNull();
+  });
+
+  it('authenticate should fail for non-existing user', async () => {
+    const result = await userModel.authenticate(
+      {
+        firstName: 'Fake',
+        lastName: 'User',
+      },
+      'passwordTest',
+    );
+
+    expect(result).toBeNull();
+  });
+
+  // -----------------------------
   // DELETE
   // -----------------------------
   it('delete should remove a user', async () => {

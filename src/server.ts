@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mainRoute from './routers';
+import favicon from 'serve-favicon';
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const port = process.env.PORT || 3001;
 const app: express.Application = express();
 const address: string = `127.0.0.1:3001`;
 
+app.use(favicon('favicon.ico'));
 app.use(cors());
 app.use(bodyParser.json());
 

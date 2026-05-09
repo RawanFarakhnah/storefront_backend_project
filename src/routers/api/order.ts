@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as handler from '../handlers/order';
-import verifyAuthToken from '../middleware/auth';
+import * as handler from '../../handlers/order';
+import verifyAuthToken from '../../middleware/auth';
 
 const orderRouter = Router();
 

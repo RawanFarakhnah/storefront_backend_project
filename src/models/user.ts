@@ -164,7 +164,7 @@ export class UserModel {
     const conn = await client.connect();
     try {
       const sql = `
-     SELECT password_digest 
+     SELECT id, firstName, lastName, password_digest
      FROM users 
      WHERE firstName = $1
        AND lastName = $2
@@ -190,9 +190,13 @@ export class UserModel {
         return null;
       }
 
-      delete user.password_digest;
-
-      return user;
+      // Map user result
+      const result = data.rows[0];
+      return {
+        id: Number(result.id),
+        firstName: result.firstname,
+        lastName: result.lastname,
+      };
     } catch (err) {
       throw new Error(`Authentication failed. Error: ${err}`);
     }

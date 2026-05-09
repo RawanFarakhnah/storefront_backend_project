@@ -3,7 +3,7 @@
     "driver": "pg",
     "host": "localhost",
     "port": 5432,
-    "database": "shapes",
+    "database": "shoppes",
     "user": "postgres",
     "password": "password123"
   },
@@ -11,7 +11,7 @@
     "driver": "pg",
     "host": "localhost",
     "port": 5432,
-    "database": "shapes_test",
+    "database": "shoppes_test",
     "user": "postgres",
     "password": "password123"
   }
