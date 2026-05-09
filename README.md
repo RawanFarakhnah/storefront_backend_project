@@ -1,54 +1,186 @@
 # Storefront Backend Project
 
-## Getting Started
+## Overview
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+This is a Node.js + Express REST API connected to a PostgreSQL database. It supports JWT authentication, database migrations, and automated testing using Jasmine.
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+---
 
-## Steps to Completion
+## Tech Stack
 
-### 1. Plan to Meet Requirements
+- Node.js / Express
+- PostgreSQL
+- dotenv
+- db-migrate
+- jsonwebtoken
+- bcrypt
+- jasmine
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+---
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+## Project Setup
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+### 1. Clone the Repository
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+```bash
+git clone https://github.com/RawanFarakhnah/storefront_backend_project.git
+cd storefront_backend_project
+```
 
-### 2.  DB Creation and Migrations
+---
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+### 2. Install Dependencies
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+```bash
+npm install
+```
 
-### 3. Models
+---
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+### 3. Environment Variables
 
-### 4. Express Handlers
+Create a `.env` file in the project root:
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=shoppes
+POSTGRES_TEST_DB=shoppes_test
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password123
 
-### 5. JWTs
+ENV=test
+PORT=3001
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+BCRYPT_PASSWORD=our-greatest-glory
+SALT_ROUNDS=10
+TOKEN_SECRET=create-your-story
+```
 
-### 6. QA and `README.md`
+---
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+## Database Configuration
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+`database.json` (used by db-migrate):
+
+```json
+{
+  "dev": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "shoppes",
+    "user": "postgres",
+    "password": "password123"
+  },
+  "test": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "shoppes_test",
+    "user": "postgres",
+    "password": "password123"
+  }
+}
+```
+
+---
+
+## Running PostgreSQL (Docker)
+
+Start the database container:
+
+```bash
+docker-compose up -d
+```
+
+---
+
+## Database Setup
+
+### 1. Create Databases
+
+Ensure the following databases exist:
+
+* shoppes (development)
+* shoppes_test (testing)
+
+If needed, create the test database manually inside the Docker container.
+
+---
+
+### 2. Run Migrations
+
+```bash
+npx db-migrate up
+```
+
+This applies migrations to the development database.
+
+---
+
+## Running the Application
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+Server runs at:
+
+```
+http://localhost:3001
+```
+
+The backend connects to the **development database (shoppes)**.
+
+---
+
+## Testing
+
+Run tests with:
+
+```bash
+npm run test
+```
+
+Tests run against the **shoppes_test** database.
+---
+
+## Project Workflow
+
+1. Clone repository
+2. Install dependencies
+3. Create `.env` file
+4. Start PostgreSQL (`docker-compose up -d`)
+5. Create databases if needed
+6. Run migrations (`npx db-migrate up`)
+7. Start server (`npm run dev`)
+8. Run tests (`npm run test`)
+
+---
+
+## Important Notes
+
+* Passwords are hashed using bcrypt before storage.
+* JWT is required for protected routes.
+* Environment variables control database connections.
+* Development and test environments use separate databases.
+
+---
+
+## Ports
+
+* Backend: `3001`
+* PostgreSQL: `5432`
+
+---
+
+## Status
+
+- CRUD API implemented
+- PostgreSQL integration complete
+- JWT authentication implemented
+- Database migrations configured
+- Jasmine testing suite added
