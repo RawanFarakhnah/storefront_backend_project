@@ -6,69 +6,59 @@ authentication.
 
 ------------------------------------------------------------------------
 
-# 1. API ENDPOINTS (RESTful Routes)
+# 1. API Endpoints (RESTful Routes)
 
-## Root Endpoint
+## Base Route
 
-  Method   Route   Description
-  -------- ------- ---------------
-  GET      `/`     Welcome route
+- **GET** `/` → Welcome route
 
-------------------------------------------------------------------------
+---
 
 ## Products
 
-  Method   Route                        Description                  Token Required
-  -------- ---------------------------- ---------------------------- ----------------
-  GET      `/products`                  Get all products             No
-  GET      `/products/:id`              Get product by ID            No
-  GET      `/products/top`              Get top 5 popular products   No
-  GET      `/products/category/:name`   Get products by category     No
-  POST     `/products`                  Create new product           Yes
-  PUT      `/products/:id`              Update product               Yes
-  DELETE   `/products/:id`              Delete product               Yes
+| Method | Endpoint                      | Description                 | Auth Required |
+|--------|------------------------------|-----------------------------|---------------|
+| GET    | `/products`                  | Get all products            | No            |
+| GET    | `/products/:id`              | Get product by ID           | No            |
+| GET    | `/products/top`              | Get top 5 popular products  | No            |
+| GET    | `/products/category/:name`   | Get products by category    | No            |
+| POST   | `/products`                  | Create a new product        | Yes           |
+| PUT    | `/products/:id`              | Update a product            | Yes           |
+| DELETE | `/products/:id`              | Delete a product            | Yes           |
 
-------------------------------------------------------------------------
+---
 
 ## Categories
 
-  Method   Route               Description          Token Required
-  -------- ------------------- -------------------- ----------------
-  GET      `/categories`       Get all categories   No
-  GET      `/categories/:id`   Get category by ID   No
-  POST     `/categories`       Create category      Yes
-  PUT      `/categories/:id`   Update category      Yes
-  DELETE   `/categories/:id`   Delete category      Yes
+| Method | Endpoint            | Description         | Auth Required |
+|--------|---------------------|---------------------|---------------|
+| GET    | `/categories`       | Get all categories  | No            |
+| GET    | `/categories/:id`   | Get category by ID  | No            |
+| POST   | `/categories`       | Create a category    | Yes           |
+| PUT    | `/categories/:id`   | Update a category    | Yes           |
+| DELETE | `/categories/:id`   | Delete a category    | Yes           |
 
-------------------------------------------------------------------------
+---
 
 ## Users
 
-  Method   Route          Description                 Token Required
-  -------- -------------- --------------------------- ----------------
-  GET      `/users`       Get all users               Yes
-  GET      `/users/:id`   Get user by ID              Yes
-  POST     `/users`       Create user (returns JWT)   No
-  PUT      `/users/:id`   Update user                 Yes
-  DELETE   `/users/:id`   Delete user                 Yes
+| Method | Endpoint        | Description                    | Auth Required |
+|--------|----------------|--------------------------------|---------------|
+| GET    | `/users`       | Get all users                 | Yes           |
+| GET    | `/users/:id`   | Get user by ID                | Yes           |
+| POST   | `/users`       | Create user (returns JWT)     | No            |
+| PUT    | `/users/:id`   | Update user                   | Yes           |
+| DELETE | `/users/:id`   | Delete user                   | Yes           |
 
-------------------------------------------------------------------------
+---
 
 ## Orders
 
-  -------------------------------------------------------------------------------------------
-  Method        Route                         Description           Token Required
-  ------------- ----------------------------- --------------------- -------------------------
-  GET           `/orders`                     Get all orders        Yes
-
-  GET           `/orders/current/:userId`     Get active orders for Yes
-                                              a user                
-
-  GET           `/orders/completed/:userId`   Get completed orders  Yes
-                                              for a user            
-  -------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------
+| Method | Endpoint                      | Description                       | Auth Required |
+|--------|------------------------------|-----------------------------------|---------------|
+| GET    | `/orders`                   | Get all orders                   | Yes           |
+| GET    | `/orders/current/:userId`   | Get active orders for a user     | Yes           |
+| GET    | `/orders/completed/:userId` | Get completed orders for a user   | Yes           |
 
 # 2. DATA SHAPES
 
